@@ -53,3 +53,9 @@ Thumbs.db
 
 # compiled templates
 src/app/homepage/pages/**/*.html
+
+# .env
+.env
+.dev.env
+.test.env
+.prod.env
