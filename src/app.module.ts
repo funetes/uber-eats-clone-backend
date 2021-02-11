@@ -4,11 +4,7 @@ import { join } from 'path';
 import * as Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
-import { User } from './users/entities/user.entity';
-import { RestaurntsModule } from './restaurnts/restaurnts.module';
-import { Restaurnt } from './restaurnts/entities/restaurnt.entity';
 
 @Module({
   imports: [
@@ -41,9 +37,8 @@ import { Restaurnt } from './restaurnts/entities/restaurnt.entity';
       database: process.env.DB_DATABASE,
       synchronize: process.env.NODE_ENV !== 'production',
       logging: process.env.NODE_ENV !== 'production',
-      entities: [User],
+      entities: [],
     }),
-    UsersModule,
     CommonModule,
   ],
   controllers: [],
