@@ -2,9 +2,12 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import * as Joi from 'joi';
-import { RestaurntsModule } from './restaurnts/restaurnts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
+import { CommonModule } from './common/common.module';
+import { User } from './users/entities/user.entity';
+import { RestaurntsModule } from './restaurnts/restaurnts.module';
 import { Restaurnt } from './restaurnts/entities/restaurnt.entity';
 
 @Module({
@@ -12,7 +15,7 @@ import { Restaurnt } from './restaurnts/entities/restaurnt.entity';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath:
-        process.env.NODE_ENV === 'development' ? '.dev.env' : '.test.env',
+        process.env.NODE_ENV === 'development' ? '.env.dev' : '.env.test',
       ignoreEnvFile: process.env.NODE_ENV === 'production',
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
@@ -38,9 +41,10 @@ import { Restaurnt } from './restaurnts/entities/restaurnt.entity';
       database: process.env.DB_DATABASE,
       synchronize: process.env.NODE_ENV !== 'production',
       logging: process.env.NODE_ENV !== 'production',
-      entities: [Restaurnt],
+      entities: [User],
     }),
-    RestaurntsModule,
+    UsersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
