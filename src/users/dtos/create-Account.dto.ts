@@ -10,4 +10,4 @@ export class CreateAccountInput extends PickType(User, [
 ]) {}
 
 @ObjectType()
-export class CreateAccountOutPut extends MutationOutput {}
+export class CreateAccountOutput extends MutationOutput {}

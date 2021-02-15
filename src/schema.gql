@@ -8,7 +8,7 @@ input CreateAccountInput {
   role: UserRole!
 }
 
-type CreateAccountOutPut {
+type CreateAccountOutput {
   error: String
   ok: Boolean!
 }
@@ -17,6 +17,16 @@ type CreateAccountOutPut {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+input EditProfileInput {
+  email: String
+  password: String
+}
+
+type EditProfileOutput {
+  error: String
+  ok: Boolean!
+}
 
 input LoginInput {
   email: String!
@@ -30,12 +40,15 @@ type LoginOutput {
 }
 
 type Mutation {
-  createAccount(input: CreateAccountInput!): CreateAccountOutPut!
+  createAccount(input: CreateAccountInput!): CreateAccountOutput!
+  editProfile(input: EditProfileInput!): EditProfileOutput!
   login(input: LoginInput!): LoginOutput!
+  verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
 
 type Query {
   me: User!
+  userProfile(id: Float!): UserProfileOutput!
 }
 
 type User {
@@ -45,10 +58,26 @@ type User {
   password: String!
   role: UserRole!
   updatedAt: DateTime!
+  verified: Boolean!
+}
+
+type UserProfileOutput {
+  error: String
+  ok: Boolean!
+  user: User
 }
 
 enum UserRole {
   client
   deliver
   owner
+}
+
+input VerifyEmailInput {
+  code: String!
+}
+
+type VerifyEmailOutput {
+  error: String
+  ok: Boolean!
 }

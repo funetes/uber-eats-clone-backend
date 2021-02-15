@@ -4,9 +4,12 @@ import { AuthUser } from 'src/auth/auth-user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import {
   CreateAccountInput,
-  CreateAccountOutPut,
+  CreateAccountOutput,
 } from './dtos/create-Account.dto';
+import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
+import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
+import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verifyEmail.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -21,30 +24,39 @@ export class UsersResolver {
     return user;
   }
 
-  @Mutation((type) => CreateAccountOutPut)
+  @Query((type) => UserProfileOutput)
+  @UseGuards(AuthGuard)
+  async userProfile(
+    @Args() userProFileInput: UserProfileInput,
+  ): Promise<UserProfileOutput> {
+    return await this.userService.findById(userProFileInput.id);
+  }
+
+  @Mutation((type) => CreateAccountOutput)
   async createAccount(
     @Args('input') createAccoutInput: CreateAccountInput,
-  ): Promise<CreateAccountOutPut> {
-    try {
-      const result = await this.userService.createAccout(createAccoutInput);
-      return result;
-    } catch (error) {
-      return {
-        error,
-        ok: false,
-      };
-    }
+  ): Promise<CreateAccountOutput> {
+    return await this.userService.createAccout(createAccoutInput);
   }
 
   @Mutation((type) => LoginOutput)
   async login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
-    try {
-      return await this.userService.login(loginInput);
-    } catch (error) {
-      return {
-        ok: false,
-        error,
-      };
-    }
+    return await this.userService.login(loginInput);
+  }
+
+  @Mutation((type) => EditProfileOutput)
+  @UseGuards(AuthGuard)
+  async editProfile(
+    @AuthUser() user: User,
+    @Args('input') editProfileInput: EditProfileInput,
+  ): Promise<EditProfileOutput> {
+    return await this.userService.editProfile(user.id, editProfileInput);
+  }
+
+  @Mutation((type) => VerifyEmailOutput)
+  async verifyEmail(
+    @Args('input') { code }: VerifyEmailInput,
+  ): Promise<VerifyEmailOutput> {
+    return await this.userService.verifyEmail(code);
   }
 }
